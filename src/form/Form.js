@@ -33,15 +33,11 @@ const Form = ({ onSubmit, onHandleCancel, styles }) => {
   const [errorValues, setErrorValues] = useState({ ...FORM_ERRORS });
 
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value } = e.target ?? e;
     setFormValues({
       ...formValues,
       [name]: value,
     });
-  };
-
-  const handleDateChange = (newDate, id) => {
-    setFormValues({ ...formValues, [id]: newDate });
   };
 
   const handleSubmit = (event) => {
@@ -53,11 +49,9 @@ const Form = ({ onSubmit, onHandleCancel, styles }) => {
       }
     }
     if (Object.keys(errors).length !== 0) {
-      setErrorValues({ ...errorValues, ...errors });
+      setErrorValues(errors);
       return;
     }
-    //Send to api
-    console.log("Sending to API, success!");
     onSubmit(formValues);
     setFormValues({ ...DEFAULT_VALUES });
     setErrorValues({ ...FORM_ERRORS });
@@ -111,8 +105,7 @@ const Form = ({ onSubmit, onHandleCancel, styles }) => {
                 id="date"
                 name="date"
                 label="date"
-                mask="__-__-____"
-                inputFormat="DD-MM-YYYY"
+                maxDate={new Date()}
                 slotProps={{
                   textField: {
                     helperText: `${
@@ -122,7 +115,7 @@ const Form = ({ onSubmit, onHandleCancel, styles }) => {
                   },
                 }}
                 value={formValues.date}
-                onChange={(e) => handleDateChange(e, "date")}
+                onChange={(e) => handleInputChange({ name: "date", value: e })}
               ></DatePicker>
             </LocalizationProvider>
           </Grid>
@@ -133,8 +126,7 @@ const Form = ({ onSubmit, onHandleCancel, styles }) => {
                 id="time"
                 name="time"
                 label="time"
-                value={formValues.time}
-                onChange={(e) => handleDateChange(e, "time")}
+                maxTime={new Date()}
                 slotProps={{
                   textField: {
                     helperText: `${
@@ -143,6 +135,8 @@ const Form = ({ onSubmit, onHandleCancel, styles }) => {
                     error: errorValues.time,
                   },
                 }}
+                value={formValues.time}
+                onChange={(e) => handleInputChange({ name: "time", value: e })}
               />
             </LocalizationProvider>
           </Grid>

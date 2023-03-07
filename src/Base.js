@@ -21,3 +21,10 @@ export const SECONDARY_BUTTON_STYLES = {
 
 export const GRID_FORM_STYLES = { marginBottom: "1rem", height: "5rem" };
 export const FIELD_STYLES = { width: "15.625rem" };
+
+export const MODAL_STYLES = {
+  width: "100%",
+  bgcolor: "background.paper",
+  boxShadow: 24,
+  p: 4,
+};
