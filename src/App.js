@@ -45,7 +45,6 @@ const App = () => {
 
   const getDataset = () => {
     const graphData = [];
-    console.log(data);
     for (const employee in data) {
       graphData.push({
         label: employee,
@@ -66,31 +65,39 @@ const App = () => {
   };
 
   return (
-    <div>
-      <Button
-        variant="contained"
-        onClick={() => setIsAddModalOpen(true)}
-        sx={PRIMARY_BUTTON_STYLES}
-      >
-        Añade valoración
-      </Button>
-      <Modal open={isAddModalOpen}>
-        <>
-          <Form
-            onSubmit={updateData}
-            onHandleCancel={() => setIsAddModalOpen(false)}
-            styles={MODAL_STYLES}
-          />
-        </>
-      </Modal>
+    <div className="metrics-page-container">
+      <h1 className="metrics-page-header">
+        Nivel de satisfacción por empleado
+      </h1>
 
-      <div className="chart-container">
-        <LineChart dataSet={getDataset()} range={range} unit={unitTime} />
-      </div>
-      <SelectTimeRange
-        unit={unitTime.name}
-        handleChange={handleSelectTimeChangle}
-      />
+      <section className="metrics-graphic-section">
+        <div className="chart-container">
+          <LineChart dataSet={getDataset()} range={range} unit={unitTime} />
+        </div>
+        <SelectTimeRange
+          unit={unitTime.name}
+          handleChange={handleSelectTimeChangle}
+        />
+      </section>
+
+      <section className="metrics-add-section">
+        <Button
+          variant="contained"
+          onClick={() => setIsAddModalOpen(true)}
+          sx={PRIMARY_BUTTON_STYLES}
+        >
+          Añade puntuación
+        </Button>
+        <Modal open={isAddModalOpen}>
+          <>
+            <Form
+              onSubmit={updateData}
+              onHandleCancel={() => setIsAddModalOpen(false)}
+              styles={MODAL_STYLES}
+            />
+          </>
+        </Modal>
+      </section>
     </div>
   );
 };

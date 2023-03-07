@@ -68,9 +68,7 @@ const Form = ({ onSubmit, onHandleCancel, styles }) => {
           className="metric-form"
           sx={styles}
         >
-          <h1 className="metric-form-title">
-            Añade una valoración sobre un empleado
-          </h1>
+          <h1 className="metric-form-title">Añade tu nivel de satisfacción</h1>
           <Grid item sx={GRID_FORM_STYLES}>
             <TextField
               sx={FIELD_STYLES}
@@ -153,7 +151,7 @@ const Form = ({ onSubmit, onHandleCancel, styles }) => {
                 variant="outlined"
                 sx={PRIMARY_BUTTON_STYLES}
               >
-                ¡Añadir valoración!
+                ¡Añadir satisfación!
               </Button>
             </Grid>
             <Grid item xs={12} sx={GRID_FORM_STYLES}>

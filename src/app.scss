@@ -1,6 +1,31 @@
-.chart-container {
-  position: relative;
-  width: 100%;
-  height: 80vh;
-  padding: 15px;
+.metrics-page-container {
+  text-align: center;
+  padding: 0.9375rem;
+  font-family: Fira Sans, Helvetica, Arial, sans-serif;
+
+  .metrics-page-header {
+    font-size: 2.75rem;
+    line-height: 3.5rem;
+    font-weight: 700;
+    color: rgba(37, 37, 61);
+  }
+
+  .metrics-graphic-section {
+    padding-top: 20px;
+  }
+
+  .chart-container {
+    position: relative;
+    width: 100%;
+    height: 70vh;
+    margin-bottom: 0.9375rem;
+  }
+
+  .select-container {
+    text-align: end;
+    display: flex;
+    justify-content: end;
+    gap: 1rem;
+    align-items: baseline;
+  }
 }
