@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { TextField, Button, Grid } from "@mui/material";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
-import { DatePicker } from "@mui/x-date-pickers";
+import { DatePicker, TimeField } from "@mui/x-date-pickers";
 import {
   GRID_FORM_STYLES,
   FIELD_STYLES,
@@ -16,15 +16,17 @@ const DEFAULT_VALUES = {
   name: "",
   value: "",
   date: new Date(),
+  time: new Date(),
 };
 
 const FORM_ERRORS = {
   name: false,
   value: false,
   date: false,
+  time: false,
 };
 
-const REQUIRED_ERROR_MESSAGE = "This field is required";
+const REQUIRED_ERROR_MESSAGE = "Este campo es obligatorio";
 
 const Form = ({ onSubmit, onHandleCancel, styles }) => {
   const [formValues, setFormValues] = useState({ ...DEFAULT_VALUES });
@@ -38,8 +40,8 @@ const Form = ({ onSubmit, onHandleCancel, styles }) => {
     });
   };
 
-  const handleDateChange = (newDate) => {
-    setFormValues({ ...formValues, date: newDate });
+  const handleDateChange = (newDate, id) => {
+    setFormValues({ ...formValues, [id]: newDate });
   };
 
   const handleSubmit = (event) => {
@@ -72,7 +74,9 @@ const Form = ({ onSubmit, onHandleCancel, styles }) => {
           className="metric-form"
           sx={styles}
         >
-          <h1 className="metric-form-title">Add new metric</h1>
+          <h1 className="metric-form-title">
+            Añade una valoración sobre un empleado
+          </h1>
           <Grid item sx={GRID_FORM_STYLES}>
             <TextField
               sx={FIELD_STYLES}
@@ -97,6 +101,7 @@ const Form = ({ onSubmit, onHandleCancel, styles }) => {
               helperText={errorValues.name ? REQUIRED_ERROR_MESSAGE : ""}
               value={formValues.value}
               onChange={handleInputChange}
+              inputProps={{ min: 0, max: 10 }}
             />
           </Grid>
           <Grid item sx={GRID_FORM_STYLES}>
@@ -106,6 +111,8 @@ const Form = ({ onSubmit, onHandleCancel, styles }) => {
                 id="date"
                 name="date"
                 label="date"
+                mask="__-__-____"
+                inputFormat="DD-MM-YYYY"
                 slotProps={{
                   textField: {
                     helperText: `${
@@ -115,10 +122,31 @@ const Form = ({ onSubmit, onHandleCancel, styles }) => {
                   },
                 }}
                 value={formValues.date}
-                onChange={handleDateChange}
+                onChange={(e) => handleDateChange(e, "date")}
               ></DatePicker>
             </LocalizationProvider>
           </Grid>
+          <Grid item sx={GRID_FORM_STYLES}>
+            <LocalizationProvider dateAdapter={AdapterDateFns}>
+              <TimeField
+                sx={FIELD_STYLES}
+                id="time"
+                name="time"
+                label="time"
+                value={formValues.time}
+                onChange={(e) => handleDateChange(e, "time")}
+                slotProps={{
+                  textField: {
+                    helperText: `${
+                      errorValues.time ? REQUIRED_ERROR_MESSAGE : ""
+                    }`,
+                    error: errorValues.time,
+                  },
+                }}
+              />
+            </LocalizationProvider>
+          </Grid>
+
           <Grid
             container
             alignItems="center"
@@ -131,7 +159,7 @@ const Form = ({ onSubmit, onHandleCancel, styles }) => {
                 variant="outlined"
                 sx={PRIMARY_BUTTON_STYLES}
               >
-                Submit metric!
+                ¡Añadir valoración!
               </Button>
             </Grid>
             <Grid item xs={12} sx={GRID_FORM_STYLES}>
@@ -140,7 +168,7 @@ const Form = ({ onSubmit, onHandleCancel, styles }) => {
                 sx={SECONDARY_BUTTON_STYLES}
                 onClick={onHandleCancel}
               >
-                Cancel
+                Cancelar
               </Button>
             </Grid>
           </Grid>
