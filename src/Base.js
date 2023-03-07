@@ -1,5 +1,5 @@
 export const PRIMARY_BUTTON_STYLES = {
-  width: "12.5rem",
+  width: "15.625rem",
   color: "#fff",
   bgcolor: "rgba(229, 25, 67)",
   border: "2px solid rgba(229,25,67)",
@@ -12,7 +12,7 @@ export const PRIMARY_BUTTON_STYLES = {
 };
 
 export const SECONDARY_BUTTON_STYLES = {
-  width: "12.5rem",
+  width: "15.625rem",
   color: "rgba(229, 25, 67)",
   bgcolor: "rgba(250,242,244)",
   borderRadius: "8px",
@@ -20,4 +20,4 @@ export const SECONDARY_BUTTON_STYLES = {
 };
 
 export const GRID_FORM_STYLES = { marginBottom: "1rem", height: "5rem" };
-export const FIELD_STYLES = { width: "12.5rem" };
+export const FIELD_STYLES = { width: "15.625rem" };
