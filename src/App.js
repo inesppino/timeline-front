@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Button, Modal } from "@mui/material";
 import { PRIMARY_BUTTON_STYLES } from "./Base";
 import Form from "./form/Form";
