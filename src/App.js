@@ -3,7 +3,12 @@ import { Button, Modal } from "@mui/material";
 import { format } from "date-fns";
 import { MODAL_STYLES, PRIMARY_BUTTON_STYLES } from "./Base";
 import { getRandomColor, getRange } from "./utils/helpers";
-import { DEFAULT_RANGE, DEFAULT_UNIT, UNIT_FORMATS } from "./utils/constants";
+import {
+  DEFAULT_RANGE,
+  DEFAULT_UNIT,
+  LITERAL_UNIT_FORMATS,
+  UNIT_FORMATS,
+} from "./utils/constants";
 import { fetchData, postNewData } from "./services/services";
 import Score from "./score/Score";
 import LineChart from "./graph/LineChart";
@@ -88,7 +93,10 @@ const App = () => {
       <h1 className="metrics-page-header">
         Nivel de satisfacción por empleado
       </h1>
-
+      <p>
+        Gráfica que muestra el nivel de satisfacción de los empleados por{" "}
+        {LITERAL_UNIT_FORMATS[unitTime.name]}
+      </p>
       {isFetching ? (
         <div>Loading...</div>
       ) : (

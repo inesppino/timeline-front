@@ -1,10 +1,12 @@
 .metrics-page-container {
+  font-family: Fira Sans, Helvetica, Arial, sans-serif;
   text-align: center;
   padding: 0.9375rem;
-  font-family: Fira Sans, Helvetica, Arial, sans-serif;
+  max-width: 75rem;
+  margin: 0 auto;
 
   .metrics-page-header {
-    font-size: 2.75rem;
+    font-size: 2.25rem;
     line-height: 3.5rem;
     font-weight: 700;
     color: rgba(37, 37, 61);
