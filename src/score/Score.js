@@ -10,7 +10,7 @@ import {
   PRIMARY_BUTTON_STYLES,
   SECONDARY_BUTTON_STYLES,
 } from "../Base";
-import "./form.scss";
+import "./score.scss";
 
 const DEFAULT_VALUES = {
   name: "",

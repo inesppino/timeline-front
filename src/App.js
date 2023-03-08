@@ -1,46 +1,70 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button, Modal } from "@mui/material";
-import { MODAL_STYLES, PRIMARY_BUTTON_STYLES } from "./Base";
 import { format } from "date-fns";
+import { MODAL_STYLES, PRIMARY_BUTTON_STYLES } from "./Base";
 import { getRandomColor, getRange } from "./utils/helpers";
-import { DEFAULT_RANGE, DEFAULT_UNIT, UNIT_FORMATS } from "./utils/constants";
-import mockData from "./mock/mockData";
-import Form from "./form/Form";
+import {
+  DEFAULT_RANGE,
+  DEFAULT_UNIT,
+  LITERAL_UNIT_FORMATS,
+  UNIT_FORMATS,
+} from "./utils/constants";
+import { fetchData, postNewData } from "./services/services";
+import Score from "./score/Score";
 import LineChart from "./graph/LineChart";
-import SelectTimeRange from "./form/SelectTimeRange";
+import SelectTimeRange from "./graph/SelectTimeRange";
 import "./app.scss";
 
 const App = () => {
-  const [data, setData] = useState({ ...mockData });
+  const [data, setData] = useState([]);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [range, setRange] = useState(DEFAULT_RANGE);
   const [unitTime, setUnitTime] = useState(DEFAULT_UNIT);
+  const [isFetching, setIsFetching] = useState(false);
 
-  const updateData = (newData) => {
-    const updatedData = { ...data };
+  useEffect(() => {
+    setIsFetching(true);
+    const getData = async () => {
+      const data = await fetchData();
+      const formattedData = formatData(data);
+      setIsFetching(false);
+      setData(formattedData);
+    };
+
+    getData();
+  }, []);
+
+  const formatData = (data) => {
+    const formattedData = {};
+    for (const metric of data) {
+      const { name, value, timestamp } = metric;
+      if (formattedData[name]) {
+        formattedData[name].data.push({ y: value, x: timestamp });
+      } else {
+        formattedData[name] = {
+          color: `rgba(${getRandomColor()},${getRandomColor()},${getRandomColor()}`,
+          data: [{ y: value, x: timestamp }],
+        };
+      }
+    }
+    return formattedData;
+  };
+
+  const updateData = async (newData) => {
     const date = format(newData.date, "yyyy-MM-dd");
     const time = format(newData.time, "HH:mm:ss");
-
-    if (updatedData[newData.name.toUpperCase()]) {
-      updatedData[newData.name.toUpperCase()].data.push({
-        x: new Date(`${date}T${time}`),
-        y: Number(newData.value),
-      });
-    } else {
-      updatedData[newData.name.toUpperCase()] = {
-        color: `rgba(${getRandomColor()},${getRandomColor()},${getRandomColor()}`,
-        data: [
-          {
-            x: new Date(`${date}T${time}`),
-            y: Number(newData.value),
-          },
-        ],
-      };
-    }
-    //Send to api
-    console.log("Sending to API, success!");
-    setData({ ...data, ...updatedData });
+    const data = {
+      name: newData.name.toUpperCase(),
+      value: newData.value,
+      timestamp: new Date(`${date}T${time}`).toISOString(),
+    };
+    const result = await postNewData(data);
     setIsAddModalOpen(false);
+    if (result) {
+      const data = await fetchData();
+      const formattedData = formatData(data);
+      setData(formattedData);
+    }
   };
 
   const getDataset = () => {
@@ -65,20 +89,27 @@ const App = () => {
   };
 
   return (
-    <div className="metrics-page-container">
+    <main className="metrics-page-container">
       <h1 className="metrics-page-header">
         Nivel de satisfacción por empleado
       </h1>
-
-      <section className="metrics-graphic-section">
-        <div className="chart-container">
-          <LineChart dataSet={getDataset()} range={range} unit={unitTime} />
-        </div>
-        <SelectTimeRange
-          unit={unitTime.name}
-          handleChange={handleSelectTimeChangle}
-        />
-      </section>
+      <p>
+        Gráfica que muestra el nivel de satisfacción de los empleados por{" "}
+        {LITERAL_UNIT_FORMATS[unitTime.name]}
+      </p>
+      {isFetching ? (
+        <div>Loading...</div>
+      ) : (
+        <section className="metrics-graphic-section">
+          <div className="chart-container">
+            <LineChart dataSet={getDataset()} range={range} unit={unitTime} />
+          </div>
+          <SelectTimeRange
+            unit={unitTime.name}
+            handleChange={handleSelectTimeChangle}
+          />
+        </section>
+      )}
 
       <section className="metrics-add-section">
         <Button
@@ -90,7 +121,7 @@ const App = () => {
         </Button>
         <Modal open={isAddModalOpen}>
           <>
-            <Form
+            <Score
               onSubmit={updateData}
               onHandleCancel={() => setIsAddModalOpen(false)}
               styles={MODAL_STYLES}
@@ -98,7 +129,7 @@ const App = () => {
           </>
         </Modal>
       </section>
-    </div>
+    </main>
   );
 };
 
